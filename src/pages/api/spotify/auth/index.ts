@@ -48,7 +48,15 @@ const getHandler = async (
   // リフレッシュトークンもない場合は、エラーを返す
   // TODO: エラーハンドリングちゃんとする
   try {
-    const newSpotifyAuth = await spotifyAuth.getSpotifyAuthFromRefreshToken();
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      throw new Error("Refresh Token not found");
+    }
+
+    const newSpotifyAuth = await spotifyAuth.getSpotifyAuthFromRefreshToken(
+      refreshToken
+    );
 
     if (
       !newSpotifyAuth.accessToken ||

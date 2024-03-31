@@ -1,10 +1,13 @@
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useTopTracks } from "~/hooks/useTopTracks";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const { getTopTracks, topTracks } = useTopTracks();
 
   /**
    * Spotifyに認証されている状態か確認する
@@ -21,7 +24,6 @@ export default function Home() {
       console.log("checkAuth responseJson", responseJson);
       setIsLogin(() => true);
     } catch (e) {
-      console.error(e);
       setIsLogin(() => false);
     }
   };
@@ -35,10 +37,30 @@ export default function Home() {
   return (
     <>
       <div>
-        <div className="mb-20">
+        <div className="mb-20 text-center">
           {isLogin ? (
             <>
-              <p>Spotifyログイン中</p>
+              <p className="mb-4">Spotifyログイン中</p>
+              <Button className="mb-4" onClick={getTopTracks}>
+                get top tracks
+              </Button>
+              <ul className="max-w-[500px] grid grid-cols-1 gap-7">
+                {topTracks &&
+                  topTracks.map((track) => (
+                    <li className="text-start" key={track.id}>
+                      <p>No.{track.id}</p>
+                      <p>{track.name}</p>
+                      <p>{track.albumName}</p>
+                      <p>{track.artistName}</p>
+                      <Image
+                        width={track.thumbnail.width}
+                        height={track.thumbnail.height}
+                        src={track.thumbnail.url || ""}
+                        alt={track.name}
+                      />
+                    </li>
+                  ))}
+              </ul>
             </>
           ) : (
             <>

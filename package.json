@@ -1,5 +1,5 @@
 {
-  "name": "mrs-green-apple-spotify-data",
+  "name": "spotify-my-top-records",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@spotify/web-api-ts-sdk": "^1.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

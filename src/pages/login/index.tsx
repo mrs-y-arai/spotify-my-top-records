@@ -16,7 +16,7 @@ export default function Login() {
     (async () => {
       const clientId = await getClientId();
       if (clientId) {
-        window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirect_uri}`;
+        window.location.href = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirect_uri}&scope=user-top-read,`;
         return;
       }
 
