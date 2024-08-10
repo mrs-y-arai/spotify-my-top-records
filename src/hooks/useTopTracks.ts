@@ -1,32 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { TrackItem, TrackList } from "~/models/Track";
+import { useLoadingState } from "~/hooks/useLoadingState";
 
 export const useTopTracks = () => {
-  type Track = {
-    id: number;
-    name: string;
-    thumbnail: {
-      url: string | null;
-      width: number;
-      height: number;
-    };
-    albumName: string;
-    artistName: string;
-  };
-
-  type TopTracks = Track[];
+  const { addLoadingKey, removeLoadingKey } = useLoadingState();
 
   /**
    * トップトラック
    */
-  const [topTracks, setTopTracks] = useState<TopTracks | null>(null);
-  useEffect(() => {
-    console.log("useEffect topTracks", topTracks);
-  }, [topTracks]);
+  const [topTracks, setTopTracks] = useState<TrackList | null>(null);
 
   /**
    * トップトラックを更新する
    */
-  const updateTopTracks = (newTopTracks: TopTracks) => {
+  const updateTopTracks = (newTopTracks: TrackList) => {
     setTopTracks(() => newTopTracks);
   };
 
@@ -34,6 +21,8 @@ export const useTopTracks = () => {
    * トップトラックを取得する
    */
   const getTopTracks = async () => {
+    addLoadingKey("getTopTracks");
+
     const response = await fetch("/api/spotify/auth", {
       method: "GET",
       headers: {
@@ -46,6 +35,7 @@ export const useTopTracks = () => {
     console.log("accessToken", accessToken);
 
     if (!accessToken) {
+      removeLoadingKey("getTopTracks");
       throw new Error("Failed to get access token");
     }
 
@@ -60,8 +50,8 @@ export const useTopTracks = () => {
     const topTracksResponseJson = await topTracksResponse.json();
     console.log("topTracksResponseJson", topTracksResponseJson);
 
-    const topTracks: TopTracks = topTracksResponseJson.items.map(
-      (item: any, index: number): Track => {
+    const topTracks: TrackList = topTracksResponseJson.items.map(
+      (item: any, index: number): TrackItem => {
         return {
           id: ++index,
           name: item.name,
@@ -77,7 +67,33 @@ export const useTopTracks = () => {
     );
 
     updateTopTracks(topTracks);
+
+    removeLoadingKey("getTopTracks");
   };
 
-  return { getTopTracks, topTracks };
+  const [ogpUrl, setOgpUrl] = useState<string>("");
+
+  /**
+   * OGP用のURLを生成する
+   */
+  const _generateOgpUrl = (topTracks: TrackList) => {
+    const baseUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT_BASE_URL}/og`;
+
+    const searchParams = new URLSearchParams({
+      first: topTracks[0].name || "",
+      second: topTracks[1].name || "",
+      third: topTracks[2].name || "",
+    });
+    const _ogpUrl = `${baseUrl}?${searchParams.toString()}`;
+
+    setOgpUrl(() => _ogpUrl);
+  };
+
+  useEffect(() => {
+    if (topTracks) {
+      _generateOgpUrl(topTracks);
+    }
+  }, [topTracks]);
+
+  return { getTopTracks, topTracks, ogpUrl };
 };

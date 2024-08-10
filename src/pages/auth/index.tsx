@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useLoadingState } from "~/hooks/useLoadingState";
 
 export default function Auth() {
   const router = useRouter();
+  const { addLoadingKey, removeLoadingKey } = useLoadingState();
 
   /**
    * アクセストークンを取得する
@@ -16,7 +18,6 @@ export default function Auth() {
       }
     );
     const responseJson = await response.json();
-    console.log("getAccessToken responseJson", responseJson);
 
     await fetch("/api/spotify/auth", {
       method: "POST",
@@ -30,11 +31,13 @@ export default function Auth() {
 
   useEffect(() => {
     (async () => {
+      addLoadingKey("auth");
       const authCode = router.query.code ? String(router.query.code) : null;
       if (authCode) {
         await getAccessToken(authCode);
         router.push("/");
       }
+      removeLoadingKey("auth");
     })();
   }, [router.query]);
 
