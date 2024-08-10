@@ -6,7 +6,8 @@ export default function Login() {
   const router = useRouter();
   const { addLoadingKey, removeLoadingKey } = useLoadingState();
 
-  const redirect_uri = "http://localhost:3000/auth";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const redirect_uri = `${baseUrl}/auth`;
 
   const getClientId = async (): Promise<string | null> => {
     const response = await fetch("/api/spotify/clientId");

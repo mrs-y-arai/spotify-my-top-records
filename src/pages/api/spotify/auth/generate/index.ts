@@ -25,6 +25,7 @@ export default async function handler(
 
   // base64にエンコード
   const base64Client = btoa(`${clientId}:${clientSecret}`);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
     headers: {
@@ -35,7 +36,7 @@ export default async function handler(
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code: authCode,
-      redirect_uri: "http://localhost:3000/auth",
+      redirect_uri: `${baseUrl}/auth`,
     }),
   });
   const responseJson: Response["data"] = await response.json();
