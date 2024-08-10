@@ -93,8 +93,6 @@ const postHandler = (
   const expiresIn = req.body.expiresIn;
   const refreshToken = req.body.refreshToken;
 
-  console.log("/api/spotify/auth post req.body", req.body);
-
   // SpotifyAuthServiceを初期化
   const spotifyAuth = new SpotifyAuthService(res);
 
@@ -104,7 +102,6 @@ const postHandler = (
       message: "Success",
     });
   } catch (e) {
-    console.error(e);
     return res.status(500).json({
       message: "Internal Server Error",
     });
