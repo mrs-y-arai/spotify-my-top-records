@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { TrackItem } from "~/models/Track";
+import { TrackItem as TrackItemType } from "~/models/Track";
 import { motion } from "framer-motion";
 
 type Props = {
-  track: TrackItem;
+  track: TrackItemType;
 };
 
 export default function TrackItem({ track }: Props) {

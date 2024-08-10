@@ -1,8 +1,8 @@
-import { TrackList } from "~/models/Track";
+import { TrackList as TrackListType } from "~/models/Track";
 import TrackItem from "./TrackItem";
 
 type Props = {
-  tracks: TrackList;
+  tracks: TrackListType;
 };
 
 export default function TrackList({ tracks }: Props) {

@@ -1,12 +1,6 @@
 import { resetCookie } from "~/backend/utils";
 import type { NextApiResponse } from "next";
 
-type SpotifyAuth = {
-  accessToken: string | null;
-  expiresIn: number | null;
-  refreshToken: string | null;
-};
-
 /**
  * すでに認証情報がある場合、このクラスのインスタンス生成時に、初期値にセットする
  * MEMO: NextApiResponseと密になっているのが気になる。
