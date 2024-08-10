@@ -72,47 +72,23 @@ export const useTopTracks = () => {
   /**
    * OGP用のURLを生成する
    */
-  const _generateOgpUrl = () => {
+  const _generateOgpUrl = (topTracks: TrackList) => {
     const baseUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT_BASE_URL}/og`;
 
-    // windowオブジェクトで、クエリパラメーターを取得する
-    const queryParams = new URLSearchParams(window.location.search);
-
-    // クエリパラメーターで、first, second, thirdがあるかどうかを確認する
-    const first = queryParams.get("first");
-    const second = queryParams.get("second");
-    const third = queryParams.get("third");
-
-    if (!first || !second || !third) return;
-
-    // const searchParams = new URLSearchParams({
-    //   first: topTracks[0].name || "",
-    //   second: topTracks[1].name || "",
-    //   third: topTracks[2].name || "",
-    // });
-    const _ogpUrl = `${baseUrl}?${queryParams.toString()}`;
-
-    setOgpUrl(() => _ogpUrl);
-  };
-
-  useEffect(() => {
-    _generateOgpUrl();
-  }, []);
-
-  const [queryParams, setQueryParams] = useState<URLSearchParams | null>(null);
-  const generateQueryParams = (topTracks: TrackList) => {
     const searchParams = new URLSearchParams({
       first: topTracks[0].name || "",
       second: topTracks[1].name || "",
       third: topTracks[2].name || "",
     });
+    const _ogpUrl = `${baseUrl}?${searchParams.toString()}`;
 
-    setQueryParams(() => searchParams);
+    setOgpUrl(() => _ogpUrl);
   };
+
   useEffect(() => {
     if (!topTracks) return;
-    generateQueryParams(topTracks);
+    _generateOgpUrl(topTracks);
   }, [topTracks]);
 
-  return { getTopTracks, topTracks, ogpUrl, queryParams, generateQueryParams };
+  return { getTopTracks, topTracks, ogpUrl };
 };

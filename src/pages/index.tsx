@@ -9,7 +9,7 @@ import SeoMeta from "~/components/layouts/SeoMeta";
 export default function Home() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  const { getTopTracks, queryParams, topTracks, ogpUrl } = useTopTracks();
+  const { getTopTracks, topTracks, ogpUrl } = useTopTracks();
   const { addLoadingKey, removeLoadingKey } = useLoadingState();
 
   /**
@@ -65,15 +65,7 @@ export default function Home() {
                 </p>
                 <Button
                   onClick={() => {
-                    const _queryParams = queryParams?.toString() ?? "";
-                    // _queryParamsがある場合、&を%26に変換する
-                    // 例: ?test=1&test2=2&test3=3 -> ?test=1&test2=2&test3=3
-                    const _formattedQueryParams = _queryParams.replace(
-                      /&/g,
-                      "%26"
-                    );
-                    const url = `${process.env.NEXT_PUBLIC_BASE_URL}?${_formattedQueryParams}`;
-
+                    const url = process.env.NEXT_PUBLIC_BASE_URL;
                     const shareUrl = `https://twitter.com/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！%0a&url=${url}`;
                     window.open(shareUrl, "_blank", "noopener noreferrer");
                   }}
