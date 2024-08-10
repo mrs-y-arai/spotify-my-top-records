@@ -32,7 +32,7 @@ export default function SeoMeta({ pageTitle, ogpImage }: Props) {
       />
       <meta
         property="og:image"
-        content={ogpImage || "/ogp_image_default.webp"}
+        content={ogpImage || "/ogp_image_default.jpg"}
       />
       <meta name="twitter:card" content="summary_large_image" />
     </Head>

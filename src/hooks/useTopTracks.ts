@@ -32,8 +32,6 @@ export const useTopTracks = () => {
     const responseJson = await response.json();
     const accessToken = responseJson.data.accessToken;
 
-    console.log("accessToken", accessToken);
-
     if (!accessToken) {
       removeLoadingKey("getTopTracks");
       throw new Error("Failed to get access token");
@@ -48,7 +46,6 @@ export const useTopTracks = () => {
     });
 
     const topTracksResponseJson = await topTracksResponse.json();
-    console.log("topTracksResponseJson", topTracksResponseJson);
 
     const topTracks: TrackList = topTracksResponseJson.items.map(
       (item: any, index: number): TrackItem => {
@@ -67,7 +64,6 @@ export const useTopTracks = () => {
     );
 
     updateTopTracks(topTracks);
-
     removeLoadingKey("getTopTracks");
   };
 
@@ -76,24 +72,49 @@ export const useTopTracks = () => {
   /**
    * OGP用のURLを生成する
    */
-  const _generateOgpUrl = (topTracks: TrackList) => {
+  const _generateOgpUrl = () => {
     const baseUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT_BASE_URL}/og`;
 
-    const searchParams = new URLSearchParams({
-      first: topTracks[0].name || "",
-      second: topTracks[1].name || "",
-      third: topTracks[2].name || "",
-    });
-    const _ogpUrl = `${baseUrl}?${searchParams.toString()}`;
+    // windowオブジェクトで、クエリパラメーターを取得する
+    const queryParams = new URLSearchParams(window.location.search);
+
+    // クエリパラメーターで、first, second, thirdがあるかどうかを確認する
+    const first = queryParams.get("first");
+    const second = queryParams.get("second");
+    const third = queryParams.get("third");
+
+    if (!first || !second || !third) return;
+
+    // const searchParams = new URLSearchParams({
+    //   first: topTracks[0].name || "",
+    //   second: topTracks[1].name || "",
+    //   third: topTracks[2].name || "",
+    // });
+    const _ogpUrl = `${baseUrl}?${queryParams.toString()}`;
 
     setOgpUrl(() => _ogpUrl);
   };
 
   useEffect(() => {
-    if (topTracks) {
-      _generateOgpUrl(topTracks);
-    }
+    _generateOgpUrl();
+  }, []);
+
+  const [queryParams, setQueryParams] = useState<URLSearchParams | null>(null);
+  const generateQueryParams = (topTracks: TrackList) => {
+    const searchParams = new URLSearchParams({
+      first: topTracks[0].name || "",
+      second: topTracks[1].name || "",
+      third: topTracks[2].name || "",
+    });
+
+    console.log("searchParams", searchParams);
+
+    setQueryParams(() => searchParams);
+  };
+  useEffect(() => {
+    if (!topTracks) return;
+    generateQueryParams(topTracks);
   }, [topTracks]);
 
-  return { getTopTracks, topTracks, ogpUrl };
+  return { getTopTracks, topTracks, ogpUrl, queryParams, generateQueryParams };
 };

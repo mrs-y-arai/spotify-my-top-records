@@ -12,7 +12,6 @@ export default function Login() {
   const getClientId = async (): Promise<string | null> => {
     const response = await fetch("/api/spotify/clientId");
     const responseJson = await response.json();
-    console.log("responseJson", responseJson);
     return responseJson.clientId;
   };
   useEffect(() => {
