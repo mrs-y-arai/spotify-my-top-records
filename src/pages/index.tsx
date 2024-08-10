@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -41,6 +42,13 @@ export default function Home() {
     })();
   }, []);
 
+  // useEffect(() => {
+  //   if (lineShareButtonRef.current) {
+  //     // @ts-ignore
+  //     LineIt.loadButton();
+  //   }
+  // }, [lineShareButtonRef.current]);
+
   return (
     <>
       <SeoMeta pageTitle="TOP" ogpImage={ogpUrl} />
@@ -63,15 +71,24 @@ export default function Home() {
                 <p className=" capitalize text-lg text-transparent gradient-color bg-clip-text font-bold mb-4">
                   share to your SNS!
                 </p>
-                <Button
-                  onClick={() => {
-                    const url = process.env.NEXT_PUBLIC_BASE_URL;
-                    const shareUrl = `https://twitter.com/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！%0a&url=${url}`;
-                    window.open(shareUrl, "_blank", "noopener noreferrer");
-                  }}
-                >
-                  Share To X
-                </Button>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={() => {
+                      const shareUrl = `https://twitter.com/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！%0a&url=${process.env.NEXT_PUBLIC_BASE_URL}`;
+                      window.open(shareUrl, "_blank", "noopener noreferrer");
+                    }}
+                  >
+                    Share To X
+                  </Button>
+                  <Link
+                    href={`https://social-plugins.line.me/lineit/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！&url=${process.env.NEXT_PUBLIC_BASE_URL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="green">Share To LINE</Button>
+                  </Link>
+                  <script type="text/javascript">LineIt.loadButton();</script>
+                </div>
               </>
             )}
           </>

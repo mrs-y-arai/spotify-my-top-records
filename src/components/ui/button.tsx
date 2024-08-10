@@ -11,6 +11,7 @@ const buttonVariants = cva(
       variant: {
         default: "gradient-color",
         black: "bg-black text-white",
+        green: "gradient-color-green",
         // destructive:
         //   "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         // outline:
