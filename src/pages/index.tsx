@@ -67,8 +67,9 @@ export default function Home() {
                   onClick={() => {
                     const _queryParams = queryParams?.toString() ?? "";
                     // _queryParamsがある場合、&を%26に変換する
+                    // 例: ?test=1&test2=2&test3=3 -> ?test=1&test2=2&test3=3
                     const _formattedQueryParams = _queryParams.replace(
-                      "&",
+                      /&/g,
                       "%26"
                     );
                     const url = `${process.env.NEXT_PUBLIC_BASE_URL}?${_formattedQueryParams}`;

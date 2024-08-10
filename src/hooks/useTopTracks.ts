@@ -107,8 +107,6 @@ export const useTopTracks = () => {
       third: topTracks[2].name || "",
     });
 
-    console.log("searchParams", searchParams);
-
     setQueryParams(() => searchParams);
   };
   useEffect(() => {
