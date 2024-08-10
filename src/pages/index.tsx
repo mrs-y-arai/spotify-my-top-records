@@ -81,7 +81,7 @@ export default function Home() {
                     Share To X
                   </Button>
                   <Link
-                    href={`https://social-plugins.line.me/lineit/share?url=${process.env.NEXT_PUBLIC_BASE_URL}`}
+                    href={`https://social-plugins.line.me/lineit/share?url=${process.env.NEXT_PUBLIC_BASE_URL}&text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name}-${topTracks[0].artistName}です！サイトにアクセスしてあなたの再生ランキングもチェック！`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
