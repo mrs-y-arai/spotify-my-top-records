@@ -66,11 +66,12 @@ export default function Home() {
                 </p>
                 <Button
                   onClick={() => {
-                    const shareUrl = `https://twitter.com/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！%0a&url=https://spotify-ranking.vercel.app/`;
+                    const url = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+                    const shareUrl = `https://twitter.com/share?text=私が最近Spotifyで一番再生した曲は、${topTracks[0].name} - ${topTracks[0].artistName}です！%0aサイトにアクセスしてあなたの再生ランキングもチェック！%0a&url=${url}`;
                     window.open(shareUrl, "_blank", "noopener noreferrer");
                   }}
                 >
-                  Share To Twitter
+                  Share To X
                 </Button>
               </>
             )}
